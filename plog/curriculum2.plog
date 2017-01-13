@@ -1,0 +1,53 @@
+
+action={teach_x, teach_y}. 
+fluent={x_received, y_received}. 
+time={0..4}. 
+boolean={true, false}. 
+
+#domain action(A; A1; A2). 
+#domain fluent(F; F1; F2). 
+#domain time(T; T1; T2). 
+
+o : time -> action. 
+
+x_result={sx0, sx1}. 
+y_result={sy0, sy1}. 
+
+x : time -> x_result. 
+y : time -> y_result. 
+
+[rtx] random(x(T)) :- o(T)=teach_x. 
+[rty] random(y(T)) :- o(T)=teach_y. 
+
+h(pos(x_received), T+1) :- x(T)=sx1. 
+h(neg(x_received), T+1) :- x(T)=sx0. 
+
+h(pos(y_received), T+1) :- y(T)=sy1. 
+h(neg(y_received), T+1) :- y(T)=sy0. 
+
+[rtx] pr(x(T)=sx1 | h(neg(x_received), T))=8/10. 
+[rtx] pr(y(T)=sy1 | h(neg(y_received), T))=8/10. 
+
+
+h(neg(x_received), 0). 
+h(neg(y_received), 0). 
+
+
+h(pos(F), T+1):- h(pos(F),T), not h(neg(F),T+1). 
+h(neg(F), T+1):- h(neg(F),T), not h(pos(F),T+1). 
+
+
+init : fluent -> boolean. 
+[initx] random(init(x_received)). 
+[inity] random(init(y_received)). 
+
+[initx] pr(init(x_received)=false)=8/10. 
+h(pos(x_received), 0) :- init(x_received)=true. 
+h(neg(x_received), 0) :- init(x_received)=false. 
+h(pos(y_received), 0) :- init(y_received)=true. 
+h(neg(y_received), 0) :- init(y_received)=false.
+
+goal(T) :- h(pos(x_received), T), h(pos(y_received), T). 
+
+[o(T)] random(o(T)) :- T<4. 
+?<o(0), o(1), o(2), o(3)> | obs(goal(4)=true). 

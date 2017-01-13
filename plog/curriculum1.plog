@@ -1,0 +1,43 @@
+
+time={0..3}. 
+
+state={s0, s1}. 
+action={teach}. 
+boolean={true, false}. 
+
+#domain time(T). 
+#domain state(S). 
+#domain action(A). 
+
+o : time -> action. 
+tea : time -> state. 
+
+[r0] random(tea(T+1)) :- o(T)=teach, T<3. 
+
+
+%[curr(T)] random(curr(T)) :- sele(T)=teach1, T<3. 
+%[make(T)] random(make(T)) :- sele(T)=test0, T<3. 
+%[make(T)] random(make(T)) :- sele(T)=test1, T<3. 
+
+[r0] pr(tea(T+1)=s1 | o(T)=teach, T<3) = 8/10. 
+%[curr(T)] pr(curr(T+1)=s11 | curr(T)=s01, sele(T)=teach0, T<2) = 8/10. 
+%[curr(T)] pr(curr(T+1)=s01 | curr(T)=s00, sele(T)=teach1, T<2) = 8/10. 
+%[curr(T)] pr(curr(T+1)=s11 | curr(T)=s10, sele(T)=teach1, T<2) = 8/10. 
+
+% [make(T)] pr(make(T)=o0 | curr(T)=s00, sele(T)=test0, T<3) = 8/10. 
+% [make(T)] pr(make(T)=o0 | curr(T)=s01, sele(T)=test0, T<3) = 8/10. 
+% [make(T)] pr(make(T)=o1 | curr(T)=s10, sele(T)=test0, T<3) = 8/10. 
+% [make(T)] pr(make(T)=o1 | curr(T)=s11, sele(T)=test0, T<3) = 8/10. 
+
+% [make(T)] pr(make(T)=o0 | curr(T)=s00, sele(T)=test1, T<3) = 8/10. 
+% [make(T)] pr(make(T)=o0 | curr(T)=s10, sele(T)=test1, T<3) = 8/10. 
+% [make(T)] pr(make(T)=o1 | curr(T)=s01, sele(T)=test1, T<3) = 8/10. 
+% [make(T)] pr(make(T)=o1 | curr(T)=s11, sele(T)=test1, T<3) = 8/10. 
+
+% goal(T) :- curr(T)=s11. 
+[o(T)] random(o(T)) :- T<2.
+
+% ?<sele(0),sele(1)> | obs(goal(2)=true), obs(curr(0)=s00). 
+% ?{curr(0)=s00}. 
+% ?{tea(1)=s10} | obs(tea(0)=s00), obs(o(0)=teach0). 
+?{tea(1)=s1} | obs(o(0)=teach). 

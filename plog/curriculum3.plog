@@ -1,0 +1,52 @@
+time={0..4}. 
+fluent={f0,f1}. 
+action={teach0,teach1}. 
+boolean={true,false}. 
+
+#domain time(T). 
+#domain fluent(F). 
+#domain action(A). 
+
+result:action, fluent, time -> boolean. 
+o:time->action. 
+
+[result(teach0,f0,T)] random(result(teach0,f0,T)) :- occur(teach0,T), h(f0,T)=false. 
+h(f0,T+1) :- result(teach0,f0,T). 
+h(f0,T+1)=false :- result(teach0, f0, T)=false. 
+
+
+[result(teach1,f1,T)] random(result(teach1,f1,T)) :- occur(teach1,T), h(f1,T)=false. 
+h(f1,T+1) :- result(teach1,f1,T). 
+h(f1,T+1)=false :- result(teach1,f1,T)=false. 
+
+[result(teach0,f0,T)] pr(result(teach0,f0,T) | h(f0,T)=false) = 9/10. 
+
+[result(teach1,f1,T)] pr(result(teach1,f1,T) | h(f1,T)=false, h(f0,T)) = 8/10. 
+[result(teach1,f1,T)] pr(result(teach1,f1,T) | h(f1,T)=false, h(f0,T)=false) = 5/10. 
+
+
+
+%[result(teach0,f1,T)] random(result(teach0,f1,T)) :- occur(teach0,T), h(f1,T)=false. 
+%h(f1,T+1) :- result(teach0,f1,T). 
+%h(f1,T+1)=false :- result(teach0, f1, T)=false. 
+
+%[result(teach1,f0,T)] random(result(teach1,f0,T)) :- occur(teach1,T), h(f0,T)=false. 
+%h(f0,T+1) :- result(teach1,f0,T). 
+%h(f0,T+1)=false :- result(teach1,f0,T)=false. 
+
+
+
+
+h(F,T+1) :- h(F,T), not h(F,T+1)=false.
+h(F,T+1)=false :- h(F,T)=false, not h(F,T+1).
+
+[o(T)] random(o(T)) :- T<4.
+
+occur(A,T) :- o(T)=A.
+
+goal :- h(f1,3), h(f0,3). 
+
+h(f0,0)=false. 
+h(f1,0)=false. 
+
+?<o(0),o(1),o(2)> | obs(goal).
